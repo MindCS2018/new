@@ -1,5 +1,5 @@
 '''
-Class Model: model for the deep clustering speech seperation
+Class Model: model for new network
 '''
 import numpy as np
 import tensorflow as tf
