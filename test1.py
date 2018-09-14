@@ -21,16 +21,21 @@ class NetworkConfig():
 
         # specifically for DNN
         self.n_ins = 10
-        self.hidden_layers_sizes = [10,10,10]
+        self.hidden_layers_sizes = [10,10]
         self.n_outs = 10
 
-def fc_layer(input, in_size,size, layer_name):
+        self.n_ins_aux = 10
+        self.hidden_layers_sizes_aux = [10,10]
+        self.n_outs_aux = 10
+
+        self.sub_layer_num=3
+def fc_layer(input, in_size,size, layer_name,activation=tf.nn.relu):
 
     w = tf.Variable(tf.truncated_normal([in_size, size]),
                     name="W" + layer_name)
     b = tf.Variable(tf.constant(0.1, shape=[size]),
                     name="b" + layer_name)
-    act = tf.nn.sigmoid(tf.matmul(input, w) + b)
+    act = tf.nn.relu(tf.matmul(input, w) + b, name="relu")
     return act
 
 class Model(object):
@@ -42,45 +47,33 @@ class Model(object):
         self.n_ins = cfg.n_ins; self.n_outs = cfg.n_outs
         self.hidden_layers_sizes = cfg.hidden_layers_sizes
         self.hidden_layers_number = len(self.hidden_layers_sizes)
-
-    def inference(self, x):
-        '''The structure of the network'''
-        
-        for i in xrange(self.hidden_layers_number):
-            if i == 0:
-                input_size =self.n_ins
-                layer_input = x
-            else:
-                input_size = self.hidden_layers_sizes[i - 1]
-                layer_input = output
-            layname="lay{0}".format(i)
-            with tf.variable_scope(layname) as scope:
-                output = fc_layer(layer_input,input_size, self.hidden_layers_sizes[i],layer_name=str(i))
-        layname="lay{0}".format(i+1)
-        with tf.variable_scope(layname) as scope:
-             output = fc_layer(output,self.hidden_layers_sizes[-1], self.n_outs,layer_name=str(i + 1))
-        return output
     
+        self.n_ins_aux = cfg.n_ins_aux; self.n_outs_aux = cfg.n_outs_aux
+        self.hidden_layers_sizes_aux = cfg.hidden_layers_sizes_aux
+        self.hidden_layers_number_aux = len(self.hidden_layers_sizes_aux)
+
+        self.sub_layer_num=cfg.sub_layer_num
     def aux_net(self,x):
-        for i in xrange(2):
+
+        for i in xrange(self.hidden_layers_number_aux):
             if i == 0:
-                input_size =self.n_ins
+                input_size =self.n_ins_aux
                 layer_input = x
             else:
-                input_size = self.hidden_layers_sizes[i - 1]
+                input_size = self.hidden_layers_sizes_aux[i - 1]
                 layer_input = output
             layname="auxlay{0}".format(i)
             with tf.variable_scope(layname) as scope:
-                output = fc_layer(layer_input,input_size, self.hidden_layers_sizes[i],layer_name=str(i))
+                output = fc_layer(layer_input,input_size, self.hidden_layers_sizes_aux[i],layer_name=str(i))
         layname="auxlay{0}".format(i+1)
         with tf.variable_scope(layname) as scope:
-             output = fc_layer(output,self.hidden_layers_sizes[-1], self.n_outs,layer_name=str(i + 1))
+             output = fc_layer(output,self.hidden_layers_sizes_aux[-1], self.n_outs_aux,layer_name=str(i + 1))
         outputs=tf.reduce_mean(output, 0)
         return outputs
     def wei_layer(self, x,aux_out,n_in,n_out,lay_num):
         '''The structure of the network'''
-        sub_layer=3
-        for i in xrange(sub_layer):
+
+        for i in xrange(self.sub_layer_num):
             layname="lay{0}_{1}".format(lay_num,i)
             with tf.variable_scope(layname) as scope:
                 out= fc_layer(x,n_in, n_out,layer_name=str(i))
@@ -108,34 +101,7 @@ class Model(object):
         with tf.variable_scope(layname) as scope:
              output = fc_layer(output,self.hidden_layers_sizes[-1], self.n_outs,layer_name=str(i + 1))
         return output
-    def inference2(self, x):
-        '''The structure of the network'''
-        sub_layer=3
-        output=[]
-        for i in xrange(sub_layer):
-            if i==0:
-                layname="lay1_{0}".format(i)
-                with tf.variable_scope(layname) as scope:
-                    output = fc_layer(x,10, 10,layer_name=str(i))
-            else:
-                layname="lay1_{0}".format(i)
-                with tf.variable_scope(layname) as scope:
-                    out = fc_layer(x,10,10,layer_name=str(i))
-                output=out+output
-        return output
-
-    def inference1(self, x):
-        '''The structure of the network'''
-        sub_layer=3
-        output=[]
-        for i in xrange(sub_layer):
-            layname="lay1_{0}".format(i)
-            with tf.variable_scope(layname) as scope:
-                out = fc_layer(x,10, 10,layer_name=str(i))
-            output.append(out)
-        new_outputs_sum = tf.reduce_sum(output, axis=0)
-        return new_outputs_sum
-        
+    
     
     def loss(self, output, Y):
         '''Defining the loss function'''
