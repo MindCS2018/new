@@ -19,3 +19,9 @@ def cal_pesq(reference, degraded, sample_rate=None, program='PESQ'):
     if not last_line.startswith('P.862 Prediction'):
         raise ValueError(last_line)
     return tuple(map(float, last_line.split()[-2:]))
+
+
+sum=0
+out=cal_pesq('path/or105.wav', 'path/dg105.wav', sample_rate=8000)
+sum=sum+out[0]
+
