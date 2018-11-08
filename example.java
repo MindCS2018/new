@@ -218,3 +218,41 @@ public class Add{
     System.out.println(z);
   }
 }
+
+//exp.8
+
+import java.util.*;
+public class Add{
+  public static void main(String[] args){
+      
+    //String[] myArray = new String[2];
+    //int[] intArray = new int[2];
+
+    // or can be declared as follows
+    String[] myArray = {"this", "is", "my", "array"};
+    int[] intArray = {1,2,3,4};
+
+
+   ArrayList<String> myList = new ArrayList<String>();
+   myList.add("Hello");
+   myList.add("World");
+
+   ArrayList<Integer> myNum = new ArrayList<Integer>();
+   myNum.add(1);
+   myNum.add(2);
+
+
+   Stack myStack = new Stack();
+   // add any type of elements (String, int, etc..)
+   myStack.push("Hello");
+   myStack.push(1);
+ 
+   
+   Queue<String> myQueue = new LinkedList<String>();
+   Queue<Integer> myNumbers = new LinkedList<Integer>();
+   myQueue.add("Hello");
+   myQueue.add("World");
+   myNumbers.add(1);
+   myNumbers.add(2);
+  }
+}
