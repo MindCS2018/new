@@ -297,3 +297,41 @@ public class FindLongestPalindrom{
 
   }
 }
+
+//exp.10
+
+import java.util.*;
+public class Solution{
+  public static boolean wordBreak(String s, Set<String> dict){
+      return wordBreakHelper(s,dict,0);
+  }
+  public static boolean wordBreakHelper(String s, Set<String> dict, int start){
+      if (start==s.length()){
+          return true;
+      }
+      for (String a: dict){
+          int len=a.length();
+          int end=start+len;
+          if (end>s.length())
+             continue;
+          if (s.substring(start,start+len).equals(a))
+             if (wordBreakHelper(s,dict,start+len))
+                return true;
+      }
+      return false;
+  }
+  public static void main(String[] args){
+      
+    String s = "leetcode";
+    Set dict = new HashSet();
+    dict.add("leet");
+    dict.add("code");
+
+    //Set<String> dict=new HashMap<String>();
+    //dict.put("leet","code");
+    boolean o=wordBreak(s,dict);
+    System.out.println(o);
+
+
+  }
+}
