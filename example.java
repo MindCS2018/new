@@ -256,3 +256,44 @@ public class Add{
    myNumbers.add(2);
   }
 }
+
+
+//exp.9
+
+import java.util.*;
+public class FindLongestPalindrom{
+  public static boolean isPalindrom(String s){
+      for (int i=0;i<s.length()-1;i++){
+          if (s.charAt(i)!=s.charAt(s.length()-1-i)){
+              return false;
+          }
+      }
+      return true;
+  }
+  public static int longestPalindrom(String s){
+      int maxPalindromLen=0;
+      String longestPalindrom=null;
+      int length=s.length();
+      for (int i=0;i<length;i++){
+          for (int j=i+1;j<length;j++){
+              int len=j-i;
+              String curr=s.substring(i,j+1);
+              if (isPalindrom(curr)){
+                  if (len>maxPalindromLen){
+                      longestPalindrom=curr;
+                      maxPalindromLen=len;
+                  }
+              }
+          }
+      }
+      return maxPalindromLen;
+  }
+  public static void main(String[] args){
+      
+    String s = "bcba";
+    int maxLen=longestPalindrom(s);
+    System.out.println(maxLen);
+
+
+  }
+}
