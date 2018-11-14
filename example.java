@@ -335,3 +335,66 @@ public class Solution{
 
   }
 }
+
+
+//2018.11.13
+import java.util.*;
+import java.util.*; 
+public class Solution{
+  public static int ladderLength(String start, String end, HashSet<String> dict){
+      if (dict.size()==0)
+         return 0;
+      dict.add(end);
+      LinkedList<String> wordQueue= new LinkedList<String>();
+      LinkedList<Integer> wordDistance=new LinkedList<Integer>();
+      wordQueue.add(start);
+      wordDistance.add(1);
+      int result=Integer.MAX_VALUE; 
+      while (!wordQueue.isEmpty()){
+          String currWord=wordQueue.pop();
+          Integer currDistance=wordDistance.pop();
+          System.out.println(currWord);
+          if (currWord.equals(end)){
+              result=currDistance;
+          }
+          for (int i=0;i<currWord.length();i++){
+              char[] currCharArr=currWord.toCharArray();
+              for (char c='a';c<'z';c++){
+                  currCharArr[i]=c;
+                  String newWord=new String(currCharArr);
+                  if (dict.contains(newWord)){
+                      wordQueue.add(newWord);
+                      wordDistance.add(currDistance+1);
+                      dict.remove(newWord);
+                  }
+              }
+          }
+      }
+      if (result<Integer.MAX_VALUE)
+          return result;
+      else
+          return 0;
+          
+  }  
+
+  public static void main(String[] args){
+      
+    String start = "hit";
+    String end="cog";
+    HashSet<String> dict = new HashSet<String>();
+    dict.add("hot");
+    dict.add("dot");
+    dict.add("dog");
+    dict.add("lot");
+    dict.add("log");
+    
+    System.out.println(dict);
+
+    //Set<String> dict=new HashMap<String>();
+    //dict.put("leet","code");
+    int o=ladderLength(start,end,dict);
+    System.out.println(o);
+
+
+  }
+}
