@@ -398,3 +398,67 @@ public class Solution{
 
   }
 }
+
+
+import java.util.*;
+import java.util.*; 
+public class Solution{
+  public static double findMedianTwoSortedArray(int A[], int B[]){
+  
+     int m=A.length;
+     int n=B.length;
+     if ((m+n)%2!=0)
+      return (double) findKth(A,B,(m+n)/2,0,m-1,0,n-1);
+     else{
+       double var1=findKth(A,B,(m+n)/2,0,m-1,0,n-1);
+       double var2=findKth(A,B,(m+n)/2-1,0,m-1,0,n-1);
+      System.out.println(var2);
+      return (var1+var2)*0.5;
+     }
+  } 
+  public static int findKth(int A[], int B[], int k, int aStart,int aEnd, int bStart,int bEnd){
+      int alen=aEnd-aStart+1;
+      int blen=bEnd-bStart+1;
+      if (alen==0)
+         return B[bStart+k];
+      if (blen==0)
+         return A[aStart+k];
+      if (k==0)
+         return A[aStart]<B[bStart]?A[aStart]:B[bStart];
+      int aMid=alen*k/(alen+blen);
+      int bMid=k-aMid-1;
+      
+      aMid=aMid+aStart;
+      bMid=bMid+bStart;
+      
+      if (A[aMid]>B[bMid]){
+          k=k-(bMid-bStart+1);
+          aEnd=aMid;
+          bStart=bMid+1;
+      } else {
+          k=k-(aMid-aStart+1);
+          bEnd=bMid;
+          aStart=aMid+1;
+          
+      }
+      return findKth(A,B,k,aStart,aEnd,bStart,bEnd);
+         
+  }
+
+  public static void main(String[] args){
+    int[] A = {1,2,3,4,5,6};//{1,3};
+    int[] B = {2,3,4,5};//{2};
+    double k=findMedianTwoSortedArray(A, B);
+    
+    System.out.println(Arrays.toString(A));
+    System.out.println(Arrays.toString(B));
+    System.out.println(k);
+
+    //Set<String> dict=new HashMap<String>();
+    //dict.put("leet","code");
+    //int o=ladderLength(start,end,dict);
+    //System.out.println(o);
+
+
+  }
+}
