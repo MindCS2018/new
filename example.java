@@ -462,3 +462,53 @@ public class Solution{
 
   }
 }
+
+
+//exp
+import java.util.*;
+import java.util.*; 
+public class Solution{
+   public static boolean isMatch(String s, String p) {
+      if(p.length() == 0)
+         return s.length() == 0;
+      //p’s length 1 is special case
+      if(p.length() == 1 || p.charAt(1) != '*'){
+         if(s.length() < 1 || (p.charAt(0) != '.' && s.charAt(0) !=
+             p.charAt(0)))
+            return false;
+         return isMatch(s.substring(1), p.substring(1));
+      }else{
+         int len = s.length();
+         int i = -1;
+         while(i<len && (i < 0 || p.charAt(0) == '.' || p.charAt(0) ==
+             s.charAt(0))){
+            if(isMatch(s.substring(i+1), p.substring(2)))
+               return true;
+            i++;
+          }
+         return false;
+      }
+} 
+
+
+
+  public static void main(String[] args){
+    //int[] A = {1,2,3,4,5,6};//{1,3};
+    //int[] B = {2,3,4,5};//{2};
+    //double k=findMedianTwoSortedArray(A, B);
+    String s="aa";
+    String p="a*";
+    boolean y=isMatch(s,p);
+    System.out.println(s);
+    //System.out.println(Arrays.toString(A));
+    //System.out.println(Arrays.toString(B));
+    System.out.println(y);
+
+    //Set<String> dict=new HashMap<String>();
+    //dict.put("leet","code");
+    //int o=ladderLength(start,end,dict);
+    //System.out.println(o);
+
+
+  }
+}
